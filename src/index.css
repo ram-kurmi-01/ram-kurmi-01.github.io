@@ -1,0 +1,290 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  color-scheme: dark;
+  --bg: #050816;
+  --bg-elevated: rgba(8, 12, 23, 0.78);
+  --line: rgba(148, 163, 184, 0.14);
+  --text: #e2e8f0;
+  --muted: rgba(226, 232, 240, 0.68);
+  --accent: #7dd3fc;
+  --accent-2: #34d399;
+  --accent-3: #f5d08a;
+}
+
+html { scroll-behavior: smooth; overflow-x: hidden; background: var(--bg); }
+
+body {
+  font-family: 'Manrope', system-ui, sans-serif;
+  background:
+    radial-gradient(1200px circle at 12% 12%, rgba(125, 211, 252, 0.11), transparent 32%),
+    radial-gradient(900px circle at 88% 14%, rgba(52, 211, 153, 0.08), transparent 30%),
+    radial-gradient(800px circle at 50% 100%, rgba(245, 208, 138, 0.06), transparent 35%),
+    linear-gradient(180deg, #050816 0%, #060b14 44%, #050816 100%);
+  color: var(--text);
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::before {
+  background-image:
+    linear-gradient(rgba(148,163,184,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148,163,184,0.045) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.85), transparent 92%);
+  opacity: 0.34;
+}
+
+body::after {
+  background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.05), transparent 32%);
+  opacity: 0.24;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+/* ── Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #050816; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, rgba(125,211,252,0.75), rgba(52,211,153,0.7)); border-radius: 999px; }
+::selection { background: rgba(125, 211, 252, 0.28); color: #f8fafc; }
+
+/* ── Gradient text ─────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #f8fafc 0%, #7dd3fc 45%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-gold {
+  background: linear-gradient(135deg, #f7e8c1 0%, #f5d08a 50%, #d9a441 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Glass panels ──────────────────────────────────── */
+.glass {
+  background: rgba(8, 12, 23, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.glass-light {
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+/* ── Glow effects ──────────────────────────────────── */
+.glow-green  { box-shadow: 0 0 24px rgba(125,211,252,0.20), 0 0 80px rgba(52,211,153,0.08); }
+.glow-leaf   { box-shadow: 0 0 16px rgba(125,211,252,0.28); }
+.text-glow   { text-shadow: 0 0 30px rgba(125,211,252,0.36); }
+
+/* ── Leaf fall ─────────────────────────────────────── */
+@keyframes leafFall {
+  0%   { transform: translateY(-40px) rotate(0deg);   opacity: 0; }
+  5%   { opacity: 1; }
+  95%  { opacity: 0.7; }
+  100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+}
+
+/* ── Tree sway (SVG silhouettes) ───────────────────── */
+@keyframes treeSway {
+  0%, 100% { transform: rotate(-2.2deg) skewX(-0.5deg); }
+  35%       { transform: rotate( 1.4deg) skewX( 0.3deg); }
+  65%       { transform: rotate(-1.0deg) skewX(-0.2deg); }
+}
+
+/* ── Grass wave ────────────────────────────────────── */
+@keyframes grassWave {
+  0%, 100% { transform: rotate(-4deg); }
+  50%       { transform: rotate( 4deg); }
+}
+
+/* ── Birds flying across ───────────────────────────── */
+@keyframes birdFly {
+  0%   { transform: translateX(-10vw); }
+  100% { transform: translateX(110vw); }
+}
+@keyframes birdFlyReverse {
+  0%   { transform: translateX(110vw) scaleX(-1); }
+  100% { transform: translateX(-10vw)  scaleX(-1); }
+}
+
+.leaf {
+  position: fixed;
+  top: -40px;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.7;
+}
+
+/* ── Section reveal ────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1),
+              transform 0.75s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Section dividers ──────────────────────────────── */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(148,163,184,0.25) 25%, rgba(125,211,252,0.6) 50%, rgba(148,163,184,0.25) 75%, transparent 100%);
+  box-shadow: 0 0 18px rgba(125,211,252,0.12);
+}
+
+/* ── Shimmer button ────────────────────────────────── */
+.btn-forest {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(15,23,42,0.92), rgba(30,41,59,0.92));
+  color: #f8fafc;
+  border: 1px solid rgba(125,211,252,0.22);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+.btn-forest::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.14) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.btn-forest:hover::after { opacity: 1; }
+.btn-forest:hover {
+  background: linear-gradient(135deg, rgba(15,23,42,1), rgba(30,41,59,1));
+  box-shadow: 0 0 28px rgba(125,211,252,0.14), 0 10px 28px rgba(2,6,23,0.35);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #dbeafe;
+  border: 1px solid rgba(148,163,184,0.24);
+  transition: all 0.3s ease;
+}
+.btn-ghost:hover {
+  background: rgba(125,211,252,0.08);
+  border-color: rgba(125,211,252,0.45);
+  box-shadow: 0 0 16px rgba(125,211,252,0.14);
+  transform: translateY(-2px);
+}
+
+/* ── Card hover ────────────────────────────────────── */
+.card-forest {
+  background: linear-gradient(180deg, rgba(10, 15, 28, 0.82), rgba(8, 12, 23, 0.88));
+  border: 1px solid rgba(148,163,184,0.12);
+  backdrop-filter: blur(16px);
+  transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+.card-forest:hover {
+  border-color: rgba(125,211,252,0.28);
+  box-shadow: 0 18px 50px rgba(2,6,23,0.40), 0 0 0 1px rgba(125,211,252,0.05);
+  transform: translateY(-4px);
+}
+
+/* ── Tree ring decorations ─────────────────────────── */
+.tree-ring {
+  border-radius: 50%;
+  border: 1px solid rgba(125,211,252,0.14);
+  animation: treeRingPulse 4s ease-in-out infinite;
+}
+@keyframes treeRingPulse {
+  0%, 100% { transform: scale(1);   opacity: 0.5; }
+  50%       { transform: scale(1.05); opacity: 1; }
+}
+
+/* ── Progress bar ──────────────────────────────────── */
+.skill-bar {
+  height: 6px;
+  background: rgba(148,163,184,0.12);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.skill-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0f172a, #7dd3fc, #34d399);
+  border-radius: 99px;
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 1.2s cubic-bezier(0.16,1,0.3,1);
+}
+.skill-bar-fill.animated { transform: scaleX(1); }
+
+/* ── Timeline line ─────────────────────────────────── */
+.timeline-line {
+  background: linear-gradient(180deg, #22c55e 0%, rgba(34,197,94,0.1) 100%);
+}
+
+/* ── Input forest ──────────────────────────────────── */
+.input-forest {
+  background: rgba(8, 12, 23, 0.72);
+  border: 1px solid rgba(148,163,184,0.16);
+  color: #f8fafc;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.input-forest::placeholder { color: rgba(148,163,184,0.46); }
+.input-forest:focus {
+  outline: none;
+  border-color: rgba(125,211,252,0.45);
+  box-shadow: 0 0 0 3px rgba(125,211,252,0.08);
+}
+
+/* ── Noise overlay ─────────────────────────────────── */
+.noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.font-display {
+  font-family: 'Space Grotesk', 'Manrope', system-ui, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
